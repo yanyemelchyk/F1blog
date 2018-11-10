@@ -1,0 +1,181 @@
+body { 
+  background-color: silver;
+  font-family:      Arial, sans-serif;
+  font-size:        medium;
+}
+
+#allcontent {
+  width:            1000px;
+  background-color: white;
+  margin-left:      auto;
+  margin-right:     auto;
+  margin-top:       10px;
+  margin-bottom:    10px;
+  padding:          1px 50px 40px 50px;
+}
+
+header {
+  background-color: white;
+  height:           60px;
+  border-bottom-style: solid;
+  border-bottom-width: thick;
+  font-size:        160%;
+}
+
+section {
+  background-color: white;
+  margin:           15px 0px 10px 0px;
+  width:            645px;
+  float:            left;
+}
+
+article {
+  background-color: white;
+  border-bottom-width: thin;
+  border-bottom-color: silver;
+  border-bottom-style: solid;
+  font-size:        95%;
+  line-height:      1.5;
+}
+
+div.newsPage {
+  background-color: white;
+  font-size:        95%;
+  line-height:      1.5;
+}
+
+section article h2 {
+  font-size:        125%;
+}
+
+div.pagination {
+  padding:          10px;
+  width:            645px;
+  text-align:       center;
+}
+
+span.current {
+  padding:          0px 5px 0px 5px;
+  border-style:     solid;
+  border-width:     thin;
+  border-color:     gray;
+}
+
+span.page {
+  padding:          0px 5px 0px 5px;
+}
+
+span.prev {
+  padding:           0px 50px 0px 5px;
+}
+
+span.next {
+  padding:           0px 5px 0px 50px;
+}
+
+div.comment {
+  background-color:  silver;
+  border-style:      solid;
+  border-color:      silver;
+  border-radius:     5px;
+  padding:           5px;
+}
+
+div.comments {
+  padding:           5px 0px 5px 0px;
+  border-bottom-style:    solid;
+  border-bottom-width:    thin;
+  border-bottom-color:    silver; 
+}
+
+aside {
+  background-color: white;
+  margin:           20px 0px 10px 675px;
+  border-color:     red;
+  border-style:     solid;
+  border-width:     thin;
+  border-radius:    5px;
+  padding:          8px 5px;
+  line-height:      1.5;
+}
+
+footer {
+  background-color: white;
+  text-align:       center;
+  clear:            left;
+  border-top-style: solid;
+  border-top-width: thick;
+  padding:          15px;
+}
+
+form label {
+  display: inline-block;
+  width: 150px;
+}
+
+.title {
+  color:            red;
+}
+
+.preview {
+  color:            gray;
+}
+
+.date {
+  text-align:       right;
+  /*display:          inline;*/
+}
+
+a:link {
+  color:            black;
+  text-decoration:  none;
+}
+
+a:visited {
+  color:            black;
+  text-decoration:  none;
+}
+
+a:hover {
+  color:            red;
+  text-decoration:  none;
+}
+
+header a:hover {
+  color:            black;
+  text-decoration:  none; 
+}
+
+div p.mark {
+  color: blue;
+}
+
+.login {
+  font-style: italic;
+}
+
+.error {
+  font-weight: bold;
+  color: #FF0000;
+}
+
+img.profile {
+  vertical-align: top;
+}
+
+td.label {
+  font-weight: bold;
+}
+
+#submit {
+  background-color: red;
+  color:            white;
+}
+
+#discuss {
+  font-size:        150%;
+  padding:          10px 0px 10px 0px;
+  border-bottom-style:    solid;
+  border-bottom-width:    thin;
+  border-bottom-color:    silver;    
+}
