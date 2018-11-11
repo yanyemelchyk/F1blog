@@ -26,6 +26,7 @@ class View
         return $this->data[$key];
     }
 
+    //todo refactoring in next iteration
     public function render()
     {
         if (is_null($this->title)) {

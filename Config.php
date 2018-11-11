@@ -1,5 +1,7 @@
 <?php
 
+//todo
+//never save config in repo. it is not secure. create config.example.json with stubs and set real values on server/local machine
 const DB_HOST = 'localhost';
 const DB_NAME = 'myProject';
 const DB_USER = 'root';

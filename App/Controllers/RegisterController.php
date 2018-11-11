@@ -20,7 +20,7 @@ class RegisterController extends Controller
             $validator->confirmPassword($password1, $password2, 'Пароль и подтверждение не совпадают');
 
             if (!$validator->isErrorEmpty()) {
-                $this->displayMessage($validator->getMessage());
+                $this->displayMessage($validator->getHtmlMessage());
                 return;
             }
             if (User::findByName($username)) {

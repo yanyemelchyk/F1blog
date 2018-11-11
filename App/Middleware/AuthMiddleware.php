@@ -3,15 +3,15 @@ namespace App\Middleware;
 
 use App\Core\App;
 
-class Auth
+class AuthMiddleware implements MiddlewareInterface
 {
-    public static function handle()
+    public function handle()
     {
         if (!isset($_SESSION['userId'])) {
             $app = App::getInstance();
+            //todo its time to replace real urls by Router method
             $app->router->redirect('/auth/login');
             exit();
         }
-        return;
     }
 }

@@ -21,7 +21,7 @@ class AuthController extends Controller
             $password = $validator->cleanAndCheckEmpty($_POST['password'], 'Введите ваш пароль');
 
             if (!$validator->isErrorEmpty()) {
-                $this->displayMessage($validator->getMessage());
+                $this->displayMessage($validator->getHtmlMessage());
                 return;
             }
             $user = User::login($username, $password);

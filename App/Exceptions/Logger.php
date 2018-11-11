@@ -8,6 +8,7 @@ class Logger
     public static function exceptionHandler(\Throwable $exception)
     {
         $code = $exception->getCode();
+        //todo !==
         if ($code != 404) {
             $code = 500;
         }
@@ -27,6 +28,7 @@ class Logger
         $message = "Uncaught exception: '" . get_class($exception) . "'";
         $message .= " with message '" . $exception->getMessage() . "'";
         $message .= "\nStack trace: " . $exception->getTraceAsString();
+        //todo \n can be replace by PHP_EOF - just to know that
         $message .= "\nThrown in '" . $exception->getFile() . "' on line " . $exception->getLine() . "\n";
         error_log($message);
     }
