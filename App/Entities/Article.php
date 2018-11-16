@@ -6,7 +6,6 @@ use App\Repositories\ArticleRepository;
 class Article extends ArticleRepository
 {
     public static $table = 'articles';
-
     private $articleId;
     private $title;
     private $date;

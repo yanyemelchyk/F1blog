@@ -7,7 +7,7 @@ class UserRepository
 {
     public static $table = '';
 
-    public static function login($username, $password)
+    public static function login($username)
     {
         $sql = '
           SELECT 
@@ -59,6 +59,7 @@ class UserRepository
             ' . static::$table . ' 
           WHERE 
             username = :username';
+
         $stmt = Database::getInstance()->prepare($sql);
         $stmt->execute([':username' => $username]);
         return $stmt->fetchObject(static::class);

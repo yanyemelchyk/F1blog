@@ -1,4 +1,3 @@
-
 <div class="newsPage">
     <h2><?= htmlspecialchars($this->article->getTitle()) ?></h2>
     <p class="date"><?= $this->article->getDate() ?></p>
@@ -18,9 +17,14 @@
 </div>
 <?php else : ?>
 <p>Чтобы оставить комментарий Вам необходимо <a href="<?= $this->url->to('auth/login') ?>">войти</a> или <a href="<?= $this->url->to('register') ?>">зарегистрироваться</a></p>
-<?php endif ?>
+<?php endif;
 
-<?= '<p class="error">' . $this->errorMsg . '</p>' ?>
+if ($this->errorMsg) {
+    foreach ($this->errorMsg as $message) {
+        echo '<p class="error">' . $message . '</p>';
+    }
+}
+?>
 
 <div id="discuss">ОБСУЖДЕНИЕ</div>
 <?php foreach ($this->comments as $comment) : ?>
@@ -30,4 +34,4 @@
         <tr><td><?= htmlspecialchars($comment->getTextComment()) ?></td></tr>
     </table>
 </div>
-<?php endforeach ?>
+<?php endforeach; ?>

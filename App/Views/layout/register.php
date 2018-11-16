@@ -1,6 +1,12 @@
 <h2>Регистрация</h2>
 
-<?= '<p class="error">' . $this->errorMsg . '</p>' ?>
+<?php
+if ($this->errorMsg) {
+    foreach ($this->errorMsg as $message) {
+        echo '<p class="error">' . $message . '</p>';
+    }
+}
+?>
 
 <form method="post" action="/register">
     <label for="username">Имя пользователя:</label>

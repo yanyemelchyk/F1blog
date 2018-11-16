@@ -8,7 +8,7 @@ class Logger
     public static function exceptionHandler(\Throwable $exception)
     {
         $code = $exception->getCode();
-        if ($code != 404) {
+        if ($code !== 404) {
             $code = 500;
         }
         http_response_code($code);
@@ -24,10 +24,9 @@ class Logger
         $date = new \DateTime();
         $log = ROOT_PATH . '/../logs/' . $date->format('Y-m-d') . '.txt';
         ini_set('error_log', $log);
-        $message = "Uncaught exception: '" . get_class($exception) . "'";
-        $message .= " with message '" . $exception->getMessage() . "'";
-        $message .= "\nStack trace: " . $exception->getTraceAsString();
-        $message .= "\nThrown in '" . $exception->getFile() . "' on line " . $exception->getLine() . "\n";
+        $message = 'Uncaught exception: "' . get_class($exception) . '" with message "' . $exception->getMessage() . PHP_EOL;
+        $message .= 'Stack trace: ' . $exception->getTraceAsString() . PHP_EOL;
+        $message .= 'Thrown in "' . $exception->getFile() . '" on line ' . $exception->getLine() . PHP_EOL;
         error_log($message);
     }
 }

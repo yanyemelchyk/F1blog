@@ -1,6 +1,12 @@
-<?= '<p class="error">' . $this->errorMsg . '</p>' ?>
+<?php
+if ($this->errorMsg) {
+    foreach ($this->errorMsg as $message) {
+        echo '<p class="error">' . $message . '</p>';
+    }
+}
+?>
 
-<form enctype="multipart/form-data" method="post" action="/addArticle">
+<form enctype="multipart/form-data" method="post" action="/article/add">
     <legend>Добавление новой статьи</legend>
     <label for="title">Заголовок статьи:</label>
     <input type="text" id="title" name="title" /><br />

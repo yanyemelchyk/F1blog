@@ -28,7 +28,7 @@
             <li><a href="<?= $this->url->to('auth/login') ?>">Уже есть аккаунт? Войти</a></li>
             <li><a href="<?= $this->url->to('register') ?>">Регистрация</a></li>
             <?php endif ?>
-            <li><a href="<?= $this->url->to('addArticle') ?>">Добавить статью</a></li>
+            <li><a href="<?= $this->url->to('article/add') ?>">Добавить статью</a></li>
             <li><a href="<?= $this->url->to('profile') ?>">Просмотреть профиль</a></li>
         </ul>
     </aside>

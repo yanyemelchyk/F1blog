@@ -6,7 +6,6 @@ use App\Repositories\UserRepository;
 class User extends UserRepository
 {
     public static $table = 'users';
-
     private $userId;
     private $username;
     private $password;

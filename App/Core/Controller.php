@@ -2,42 +2,49 @@
 
 namespace App\Core;
 
+use App\Exceptions\NotFoundHttpException;
 use App\Views\View;
+use App\Middleware\MiddlewareInterface;
 
-class Controller
+abstract class Controller
 {
     protected $view;
 
+    /**
+     * @var MiddlewareInterface[]
+     */
+    protected $middleware;
+
     public function __construct()
     {
+        session_start();
         $this->view = new View();
     }
 
-    protected function middleware($absName)
+    public function run($action)
     {
-        $absName::handle();
-    }
+        if (!method_exists($this, $action)) {
+            throw new NotFoundHttpException('action not found');
+        }
+        $this->setMiddleware();
 
-    protected function setViewValues($template, $title)
-    {
-        $this->view->template = $template;
-        $this->view->title = $title;
+        if (isset($this->middleware[$action])) {
+            foreach ($this->middleware[$action] as $middleware) {
+                $middleware->handle();
+            }
+        }
+        $this->$action();
     }
 
     protected function displayMessage($message)
     {
-        $this->view->errorMsg = $message;
+        if (is_array($message)) {
+            $this->view->errorMsg = $message;
+        } else {
+            $this->view->errorMsg[] = $message;
+        }
         $this->view->render();
     }
 
-    protected function sessionInit()
-    {
-        session_start();
-        if (!isset($_SESSION['userId'])) {
-            if (isset($_COOKIE['userId']) && isset($_COOKIE['username'])) {
-                $_SESSION['userId'] = $_COOKIE['userId'];
-                $_SESSION['username'] = $_COOKIE['username'];
-            }
-        }
-    }
+    abstract protected function setMiddleware();
 }

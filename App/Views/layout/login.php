@@ -1,8 +1,12 @@
 <h2>Войти</h2>
 
-<?= '<p class="error">' . $this->errorMsg . '</p>' ?>
-
-<?php if (empty($_SESSION['userId'])): ?>
+<?php
+if ($this->errorMsg) {
+    foreach ($this->errorMsg as $message) {
+        echo '<p class="error">' . $message . '</p>';
+    }
+}
+?>
 
 <form method="post" action="/auth/login">
     <fieldset>
@@ -13,7 +17,3 @@
     </fieldset>
     <input type="submit" value="Войти" name="submit" />
 </form>
-
-<?php else: ?>
-<p class="login">Вы вошли как <?= $_SESSION['username'] ?></p>
-<?php endif ?>
