@@ -8,6 +8,7 @@
 <?php if (isset($_SESSION['userId'])) : ?>
 <div class="comment">
     <form name="comment" action="/article/index/id/<?=$this->article->getArticleId() ?>" method="post">
+        <?php //todo Get name from user object and use. DO not use session in view ?>
         <legend>Ваше мнение, <?php echo $_SESSION['username'] ?>?</legend>
         <input type="hidden" name="username" value="<?php echo $_SESSION['username'] ?>" />
         <textarea rows="5" cols="75" name="textComment"></textarea>

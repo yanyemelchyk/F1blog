@@ -38,8 +38,11 @@ class AuthController extends Controller
                 $this->displayMessage('Неправильный логин или пароль');
                 return;
             }
-            $_SESSION['userId'] = $user->getUserId();
-            $_SESSION['username'] = $user->getUsername();
+
+
+            $_SESSION['user'] = $user;
+
+
             $date = new DateTime('+5 days');
             $expires = $date->format('U');
             $session = new Session();

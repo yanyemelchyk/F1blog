@@ -7,6 +7,7 @@ class Router
 {
     const DEFAULT_CONTROLLER = 'IndexController';
     const DEFAULT_ACTION = 'indexAction';
+
     private $controller;
     private $action;
     private $params;

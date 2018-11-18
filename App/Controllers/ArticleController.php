@@ -35,11 +35,19 @@ class ArticleController extends Controller
             throw new NotFoundHttpException();
         }
         $id = $validator->clean(App::getInstance()->router->getParams()['id']);
+        //todo do not put code which is coupled in different places
+        $article = Article::findById($id);
+        if (!$article) {
+            throw new NotFoundHttpException('Страница не найдена');
+        }
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        //todo ===
+        //todo in next iteration we will create CommentController and solve this with ajax
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            $articleId = $validator->clean($_POST['articleId']);
-            $username = $validator->clean($_POST['username']);
+            //todo validation -- be more strict
+            $articleId = $validator->isDigit($_POST['articleId']);
+            $username = $validator->isAlpha($_POST['username']);
             $textComment = $validator->clean($_POST['textComment']);
             $validator->checkEmpty($textComment, 'Введите ваш комментарий');
 
@@ -47,19 +55,9 @@ class ArticleController extends Controller
                 App::getInstance()->router->refresh();
                 return;
             }
-            if ($validator->getError()) {
-                foreach ($validator->getError() as $error) {
-                    $this->view->errorMsg[] = $error;
-                }
-            } else {
-                $this->view->errorMsg[] = 'Ошибка при добавлении комментария. Поворите попытку';
-            }
+            $this->view->errorMsg[] = array_merge($validator->getError(), ['Ошибка при добавлении комментария. Поворите попытку']);
         }
-        $article = Article::findById($id);
 
-        if (is_null($article)) {
-            throw new NotFoundHttpException('Страница не найдена');
-        }
         $comments = Comment::find($id);
 
         if (empty($comments)) {
@@ -74,11 +72,7 @@ class ArticleController extends Controller
 
     public function addAction()
     {
-        $this->view->template = 'addArticle.php';
-        $this->view->title = 'Добавление новой статьи';
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $validator = new Validator();
             $title = $validator->clean($_POST['title']);
             $content = $validator->clean($_POST['content']);
@@ -98,9 +92,10 @@ class ArticleController extends Controller
             }
             $this->displayMessage('Ошибка! Статья не загружена!');
             return;
-        } else {
-            $this->view->render();
         }
+        $this->view->template = 'addArticle.php';
+        $this->view->title = 'Добавление новой статьи';
+        $this->view->render();
     }
 
     public function edit()

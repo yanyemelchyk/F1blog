@@ -12,6 +12,21 @@ class RegisterController extends Controller
         // TODO: Implement setMiddleware() method.
     }
 
+    /*
+     * todo
+     * in future we should do something similar
+     * RegisterController
+     *      loginAction
+     *      logoutAction
+     * Article
+     *      indexAction
+     *      showAction
+     *      createAction
+     *      deleteAction
+     * and so on for all other controllers
+     *
+     * it is CRUD implementation
+     */
     public function indexAction()
     {
         $this->view->template = 'register.php';
@@ -20,6 +35,7 @@ class RegisterController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $validator = new Validator();
+            //todo replace clean - use more strict validateion (digits, alpha)
             $username = $validator->clean($_POST['username']);
             $password1 = $validator->clean($_POST['password1']);
             $password2 = $validator->clean($_POST['password2']);
@@ -42,12 +58,11 @@ class RegisterController extends Controller
                 $this->displayMessage('Произошла ошибка при создании пользователя. Повторите попытку');
                 return;
             }
-
             $this->view->template = 'login.php';
             $this->view->title = 'Авторизация пользователя';
-            $this->displayMessage('Ваш аккаунт создан. Вы можете войти');
-        } else {
-            $this->view->render();
+            $this->view->errorMsg[] = 'Ваш аккаунт создан. Вы можете войти';
         }
+        //todo try to avoid else statement where it is possible
+        $this->view->render();
     }
 }

@@ -28,6 +28,16 @@ class Validator
         return $field;
     }
 
+    public function isDigit($value)
+    {
+        return ctype_digit($value);
+    }
+
+    public function isAlpha($value)
+    {
+        return ctype_alpha($value);
+    }
+
     public function confirmPassword($password1, $password2, $error)
     {
         if ($password1 !== $password2) {
@@ -37,6 +47,7 @@ class Validator
 
     public function checkImage($filesImage)
     {
+        //todo clear ambiguous here
         $filesImageName = $this->clean($filesImage['name']);
         $this->checkEmpty($filesImageName, 'Выберите изображение для статьи');
 

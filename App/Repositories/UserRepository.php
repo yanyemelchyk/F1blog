@@ -7,6 +7,7 @@ class UserRepository
 {
     public static $table = '';
 
+    //todo rename to findByUsername
     public static function login($username)
     {
         $sql = '
@@ -35,6 +36,7 @@ class UserRepository
         return $stmt->execute([':username' => $username, ':password' => $password]);
     }
 
+    //todo reaname to find
     public static function read($userId)
     {
         $sql = '
@@ -50,6 +52,7 @@ class UserRepository
         return $stmt->fetchObject(static::class);
     }
 
+    //todo ambiguous - use self::login()
     public static function findByName($username)
     {
         $sql = '

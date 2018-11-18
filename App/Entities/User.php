@@ -23,6 +23,7 @@ class User extends UserRepository
         return $this->password;
     }
 
+    //todo rename column to id
     function getUserId()
     {
         return $this->userId;

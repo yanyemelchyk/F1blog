@@ -36,6 +36,7 @@ abstract class Controller
         $this->$action();
     }
 
+    //todo ambiguous - do it explicitly
     protected function displayMessage($message)
     {
         if (is_array($message)) {

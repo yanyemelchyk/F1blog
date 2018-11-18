@@ -22,6 +22,5 @@ class CheckSessionMiddleware implements MiddlewareInterface
                 $_SESSION['userId'] = $session->getUserId();
             }
         }
-        return;
     }
 }

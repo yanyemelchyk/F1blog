@@ -5,7 +5,7 @@ use App\Core\Database;
 
 class ArticleRepository
 {
-    public static $table = '';
+    public static $table = '';  //todo why it is empty
 
     public static function findAll()
     {

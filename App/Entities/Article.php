@@ -5,6 +5,7 @@ use App\Repositories\ArticleRepository;
 
 class Article extends ArticleRepository
 {
+    //todo replace table from Entities - only repo should know details about Database
     public static $table = 'articles';
     private $articleId;
     private $title;
@@ -12,6 +13,7 @@ class Article extends ArticleRepository
     private $content;
     private $image;
 
+    //todo getId -- rename column to id
     public function getArticleId()
     {
         return $this->articleId;
