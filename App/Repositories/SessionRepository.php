@@ -6,33 +6,33 @@ use App\Core\Database;
 
 class SessionRepository
 {
-    public static $table = '';
+    const TABLE = 'sessions';
 
-    public static function createSession($session)
+    public static function create($session)
     {
         $sql = '
           INSERT INTO 
-            ' . $session::$table . ' 
-            (sessionId, userId, expires) 
+            ' . self::TABLE . ' 
+            (id, userId, expires) 
           VALUES 
-            (:sessionId, :userId, :expires)';
+            (:id, :userId, :expires)';
 
         $stmt = Database::getInstance()->prepare($sql);
-        $stmt->execute([':sessionId' => $session->getSessionId(), ':userId' => $session->getUserId(), ':expires' => $session->getExpires()]);
+        $stmt->execute([':id' => $session->getId(), ':userId' => $session->getUserId(), ':expires' => $session->getExpires()]);
     }
 
-    public static function getSession($sessionId)
+    public static function findBySessionId($sessionId)
     {
         $sql = '
           SELECT 
             userId, expires 
           FROM 
-            ' . static::$table . ' 
+            ' . self::TABLE . ' 
           WHERE 
-            sessionId = :sessionId';
+            id = :id';
 
         $stmt = Database::getInstance()->prepare($sql);
-        $stmt->execute([':sessionId' => $sessionId]);
+        $stmt->execute([':id' => $sessionId]);
         return $stmt->fetchObject(static::class);
     }
 }

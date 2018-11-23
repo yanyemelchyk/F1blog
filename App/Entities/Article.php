@@ -5,16 +5,15 @@ use App\Repositories\ArticleRepository;
 
 class Article extends ArticleRepository
 {
-    public static $table = 'articles';
-    private $articleId;
+    private $id;
     private $title;
     private $date;
     private $content;
     private $image;
 
-    public function getArticleId()
+    public function getId()
     {
-        return $this->articleId;
+        return $this->id;
     }
 
     public function getTitle()

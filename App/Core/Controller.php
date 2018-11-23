@@ -36,15 +36,5 @@ abstract class Controller
         $this->$action();
     }
 
-    protected function displayMessage($message)
-    {
-        if (is_array($message)) {
-            $this->view->errorMsg = $message;
-        } else {
-            $this->view->errorMsg[] = $message;
-        }
-        $this->view->render();
-    }
-
     abstract protected function setMiddleware();
 }

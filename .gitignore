@@ -1,6 +1,4 @@
 .idea
 logs/
-vendor/
-public/images/
-/composer.json
 /Config.php
+public/images/

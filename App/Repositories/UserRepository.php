@@ -5,15 +5,15 @@ use App\Core\Database;
 
 class UserRepository
 {
-    public static $table = '';
+    const TABLE = 'users';
 
-    public static function login($username)
+    public static function findByUsername($username)
     {
         $sql = '
           SELECT 
-            userId, username, password 
+            id, username, password 
           FROM 
-            ' . static::$table . ' 
+            ' . self::TABLE . ' 
           WHERE 
             username = :username';
 
@@ -26,7 +26,7 @@ class UserRepository
     {
         $sql = '
           INSERT INTO 
-            ' . static::$table . ' 
+            ' . self::TABLE . ' 
             (username, password) 
           VALUES 
             (:username, :password)';
@@ -35,33 +35,18 @@ class UserRepository
         return $stmt->execute([':username' => $username, ':password' => $password]);
     }
 
-    public static function read($userId)
+    public static function findByUserId($userId)
     {
         $sql = '
           SELECT 
             username, lastName, firstName, picture 
           FROM 
-            ' . static::$table . ' 
+            ' . self::TABLE . ' 
           WHERE 
-            userId = :userId';
+            id = :id';
 
         $stmt = Database::getInstance()->prepare($sql);
-        $stmt->execute([':userId' => $userId]);
-        return $stmt->fetchObject(static::class);
-    }
-
-    public static function findByName($username)
-    {
-        $sql = '
-          SELECT 
-            username 
-          FROM 
-            ' . static::$table . ' 
-          WHERE 
-            username = :username';
-
-        $stmt = Database::getInstance()->prepare($sql);
-        $stmt->execute([':username' => $username]);
+        $stmt->execute([':id' => $userId]);
         return $stmt->fetchObject(static::class);
     }
 }

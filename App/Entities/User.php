@@ -5,8 +5,7 @@ use App\Repositories\UserRepository;
 
 class User extends UserRepository
 {
-    public static $table = 'users';
-    private $userId;
+    private $id;
     private $username;
     private $password;
     private $lastName;
@@ -23,9 +22,9 @@ class User extends UserRepository
         return $this->password;
     }
 
-    function getUserId()
+    function getId()
     {
-        return $this->userId;
+        return $this->id;
     }
 
     function getLastName()

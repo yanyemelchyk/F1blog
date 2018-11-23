@@ -5,32 +5,32 @@ use App\Core\Database;
 
 class ArticleRepository
 {
-    public static $table = '';
+    const TABLE = 'articles';
 
-    public static function findAll()
+    public static function findAllArticles()
     {
         $sql = '
           SELECT 
-            articleId, title, date, content, image 
+            id, title, date, content, image 
           FROM 
-            ' . static::$table . ' 
+            ' . self::TABLE . ' 
           ORDER BY 
-            date DESC, articleId DESC';
+            date DESC, id DESC';
 
         $stmt = Database::getInstance()->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
 
-    public static function findById($id)
+    public static function findByArticleId($id)
     {
         $sql = '
           SELECT 
-            articleId, title, date, content, image 
+            id, title, date, content, image 
           FROM 
-            ' . static::$table . ' 
+            ' . self::TABLE . ' 
           WHERE 
-            articleId = :id';
+            id = :id';
 
         $stmt = Database::getInstance()->prepare($sql);
         $stmt->execute([':id' => $id]);
@@ -41,7 +41,7 @@ class ArticleRepository
     {
         $sql = '
           INSERT INTO 
-            ' . static::$table . ' 
+            ' . self::TABLE . ' 
             (title, date, content, image) 
           VALUES 
             (:title, NOW(), :content, :image)';

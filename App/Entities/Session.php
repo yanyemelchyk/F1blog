@@ -6,14 +6,13 @@ use App\Repositories\SessionRepository;
 
 class Session extends SessionRepository
 {
-    public static $table = 'sessions';
-    private $sessionId;
+    private $id;
     private $userId;
     private $expires;
 
-    public function getSessionId()
+    public function getId()
     {
-        return $this->sessionId;
+        return $this->id;
     }
 
     public function getUserId()
@@ -26,9 +25,9 @@ class Session extends SessionRepository
         return $this->expires;
     }
 
-    public function setSessionId($sessionId)
+    public function setId($id)
     {
-        $this->sessionId = $sessionId;
+        $this->id = $id;
     }
 
     public function setUserId($userId)

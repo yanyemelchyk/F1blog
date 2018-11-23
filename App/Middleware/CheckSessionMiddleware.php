@@ -9,19 +9,17 @@ class CheckSessionMiddleware implements MiddlewareInterface
 {
     public function handle()
     {
-        if (!isset($_SESSION['userId']) && isset($_COOKIE['sessionId'])) {
+        if (!isset($_SESSION['user']) && isset($_COOKIE['sessionId'])) {
 
             $sessionId = $_COOKIE['sessionId'];
-            $session = Session::getSession($sessionId);
+            $session = Session::findBySessionId($sessionId);
             $date = new \DateTime();
             $current = $date->format('U');
 
             if ($session && $current < $session->getExpires()) {
-                $user = User::read($session->getUserId());
-                $_SESSION['username'] = $user->getUsername();
-                $_SESSION['userId'] = $session->getUserId();
+                $user = User::findByUserId($session->getUserId());
+                $_SESSION['user'] = $user;
             }
         }
-        return;
     }
 }

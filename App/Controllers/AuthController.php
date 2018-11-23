@@ -5,7 +5,6 @@ use App\Core\App;
 use App\Core\Controller;
 use App\Entities\Session;
 use App\Entities\User;
-use App\Helpers\Validator;
 use App\Repositories\SessionRepository;
 use DateTime;
 
@@ -21,32 +20,35 @@ class AuthController extends Controller
         $this->view->template = 'login.php';
         $this->view->title = 'Авторизация пользователя';
 
-        if (!isset($_SESSION['userId']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
-            $validator = new Validator();
-            $username = $validator->clean($_POST['username']);
-            $password = $validator->clean($_POST['password']);
-            $validator->checkEmpty($username, 'Введите ваше имя пользователя');
-            $validator->checkEmpty($password, 'Введите ваш пароль');
+        if (!isset($_SESSION['user']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            $username = $_POST['username'];
+            $password = $_POST['password'];
 
-            if ($validator->getError()) {
-                $this->displayMessage($validator->getError());
+            if (!ctype_alnum($username)) {
+                $this->view->errorMsg[] = 'Введите ваше имя пользователя';
+            }
+            if (!ctype_alnum($password)) {
+                $this->view->errorMsg[] = 'Введите ваш пароль';
+            }
+            if ($this->view->errorMsg) {
+                $this->view->render();
                 return;
             }
-            $user = User::login($username, $password);
+            $user = User::findByUsername($username);
 
             if (!$user || !password_verify($password, $user->getPassword())) {
-                $this->displayMessage('Неправильный логин или пароль');
+                $this->view->errorMsg[] = 'Неправильный логин или пароль';
+                $this->view->render();
                 return;
             }
-            $_SESSION['userId'] = $user->getUserId();
-            $_SESSION['username'] = $user->getUsername();
+            $_SESSION['user'] = $user;
             $date = new DateTime('+5 days');
             $expires = $date->format('U');
             $session = new Session();
             $session->setExpires($expires);
-            $session->setSessionId(session_id());
-            $session->setUserId($user->getUserId());
-            SessionRepository::createSession($session);
+            $session->setId(session_id());
+            $session->setUserId($user->getId());
+            SessionRepository::create($session);
             setcookie("sessionId", session_id(), $expires, "/");
 
             App::getInstance()->router->redirect('/');
@@ -60,7 +62,7 @@ class AuthController extends Controller
         $date = new DateTime('-5 days');
         $expires = $date->format('U');
 
-        if (isset($_SESSION['userId'])) {
+        if (isset($_SESSION['user'])) {
             $_SESSION = array();
 
             if (isset($_COOKIE[session_name()])) {

@@ -1,18 +1,14 @@
-<?php
-if ($this->errorMsg) {
-    foreach ($this->errorMsg as $message) {
-        echo '<p class="error">' . $message . '</p>';
-    }
-}
-?>
+<?php foreach ($this->errorMsg as $message) : ?>
+<p class="error"><?= $message ?></p>
+<?php endforeach; ?>
 
-<form enctype="multipart/form-data" method="post" action="/article/add">
+<form enctype="multipart/form-data" method="post" action="/article/create">
     <legend>Добавление новой статьи</legend>
     <label for="title">Заголовок статьи:</label>
-    <input type="text" id="title" name="title" /><br />
+    <input type="text" id="title" name="title"><br>
     <label for="content">Содержание статьи:</label>
-    <textarea id="content" rows="15" cols="50" name="content"></textarea></br>
+    <textarea id="content" rows="15" cols="50" name="content"></textarea><br>
     <label for="image">Фото:</label>
-    <input type="file" id="image" name="image" /><br />
-    <input type="submit" value="Добавить" name="submit" />
+    <input type="file" id="image" name="image"><br>
+    <input type="submit" value="Добавить" name="submit">
 </form>

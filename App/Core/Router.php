@@ -5,8 +5,9 @@ use App\Exceptions\NotFoundHttpException;
 
 class Router
 {
-    const DEFAULT_CONTROLLER = 'IndexController';
+    const DEFAULT_CONTROLLER = 'ArticleController';
     const DEFAULT_ACTION = 'indexAction';
+
     private $controller;
     private $action;
     private $params;
