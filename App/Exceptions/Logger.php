@@ -14,9 +14,7 @@ class Logger
         http_response_code($code);
         self::log($exception);
         $view = new View;
-        $view->template = $code . '.html';
-        $view->title = 'Formula 1 blog';
-        $view->render();
+        $view->render($code . '.html', ['title' => 'Formula 1 blog']);
     }
 
     private static function log($exception)

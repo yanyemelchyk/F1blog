@@ -6,7 +6,8 @@ use App\Helpers\UrlHelper;
 class View
 {
     public $data = [];
-    public $errorMsg = [];
+    public $errors = [];
+    public $message;
     public $title;
     public $template;
     public $url;
@@ -26,8 +27,13 @@ class View
         return $this->data[$key];
     }
 
-    public function render()
+    public function render($template, array $params)
     {
+        $this->template = $template;
+
+        foreach ($params as $key=>$value) {
+            $this->{$key} = $value;
+        }
         ob_start();
         include ROOT_PATH . '/../App/Views/layout/template.php';
         $content = ob_get_contents();

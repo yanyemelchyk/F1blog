@@ -1,8 +1,9 @@
 <h2>Войти</h2>
 
-<?php foreach ($this->errorMsg as $message) : ?>
-<p class="error"><?= $message ?></p>
-<?php endforeach; ?>
+<?php foreach ($this->errors as $error) : ?>
+<p class="error"><?= $error ?></p>
+<?php endforeach;
+echo $this->message ?? ''; ?>
 
 <form method="post" action="/auth/login">
     <fieldset>

@@ -1,7 +1,7 @@
 <h2>Регистрация</h2>
 
-<?php foreach ($this->errorMsg as $message) : ?>
-<p class="error"><?= $message ?></p>
+<?php foreach ($this->errors as $error) : ?>
+<p class="error"><?= $error ?></p>
 <?php endforeach; ?>
 
 <form method="post" action="/user/create">

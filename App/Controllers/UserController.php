@@ -20,57 +20,43 @@ class UserController extends Controller
 
     public function createAction()
     {
-        $this->view->template = 'register.php';
-        $this->view->title = 'Регистрация пользователя';
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $username = $_POST['username'];
             $password = $_POST['password1'];
             $password2 = $_POST['password2'];
 
             if (!ctype_alnum($username) || !ctype_alnum($password)) {
-                $this->view->errorMsg[] = 'Допустимы только латинские буквы и цифры';
+                $this->view->errors[] = 'Допустимы только латинские буквы и цифры';
             }
             if ($password !== $password2) {
-                $this->view->errorMsg[] = 'Пароль и подтверждение не совпадают';
+                $this->view->errors[] = 'Пароль и подтверждение не совпадают';
             }
-            if ($this->view->errorMsg) {
-                $this->view->render();
-                return;
-            }
-            if (User::findByUsername($username)) {
-                $this->view->errorMsg[] = 'Пользователь с таким логином уже существует';
-                $this->view->render();
-                return;
-            }
-            $password = password_hash($password, PASSWORD_DEFAULT);
+            if (!$this->view->errors) {
 
-            if (!User::create($username, $password)) {
-                $this->view->errorMsg[] = 'Произошла ошибка при создании пользователя. Повторите попытку';
-                $this->view->render();
-                return;
+                if (!User::findByUsername($username)) {
+                    $password = password_hash($password, PASSWORD_DEFAULT);
+
+                    if (User::create($username, $password)) {
+                        $this->view->message = 'Ваш аккаунт создан. Вы можете войти';
+                        $this->view->render('login.php', ['title' => 'Авторизация пользователя']);
+                        return;
+                    } else {
+                        $this->view->errors[] = 'Произошла ошибка при создании пользователя. Повторите попытку';
+                    }
+                } else {
+                    $this->view->errors[] = 'Пользователь с таким логином уже существует';
+                }
             }
-            $this->view->template = 'login.php';
-            $this->view->title = 'Авторизация пользователя';
-            $this->view->errorMsg[] = 'Ваш аккаунт создан. Вы можете войти';
-            $this->view->render();
-        } else {
-            $this->view->render();
         }
+        $this->view->render('register.php', ['title' => 'Регистрация пользователя']);
     }
 
     public function showAction()
     {
-        $this->view->template = 'profile.php';
-        $this->view->title = 'Профиль пользователя';
-
         $user = User::findByUserId($_SESSION['user']->getId());
         if (!$user) {
-            $this->view->errorMsg[] = 'При загрузке данных профиля произошла ошибка. Повторите попытку';
-            $this->view->render();
-            return;
+            $this->view->errors[] = 'При загрузке данных профиля произошла ошибка. Повторите попытку';
         }
-        $this->view->user = $user;
-        $this->view->render();
+        $this->view->render('profile.php', ['title' => 'Профиль пользователя', 'user' => $user]);
     }
 }

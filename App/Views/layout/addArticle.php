@@ -1,5 +1,5 @@
-<?php foreach ($this->errorMsg as $message) : ?>
-<p class="error"><?= $message ?></p>
+<?php foreach ($this->errors as $error) : ?>
+<p class="error"><?= $error ?></p>
 <?php endforeach; ?>
 
 <form enctype="multipart/form-data" method="post" action="/article/create">

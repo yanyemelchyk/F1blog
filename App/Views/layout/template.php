@@ -2,9 +2,11 @@
 <html lang="ru">
 <head>
     <meta charset= "utf-8" />
-    <title>
-        <?= $this->title ?>
-    </title>
+    <title><?= $this->title ?></title>
+    <script
+            src="http://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
     <link rel="stylesheet" type = "text/css" href="/style.css" />
 </head>
 
@@ -15,9 +17,7 @@
     </header>
 
     <section>
-
         <?php include "./../App/Views/layout/$this->template" ?>
-
     </section>
 
     <aside>

@@ -81,13 +81,6 @@ div.comment {
   padding:           5px;
 }
 
-div.comments {
-  padding:           5px 0px 5px 0px;
-  border-bottom-style:    solid;
-  border-bottom-width:    thin;
-  border-bottom-color:    silver; 
-}
-
 aside {
   background-color: white;
   margin:           20px 0px 10px 675px;
@@ -177,5 +170,5 @@ td.label {
   padding:          10px 0px 10px 0px;
   border-bottom-style:    solid;
   border-bottom-width:    thin;
-  border-bottom-color:    silver;    
+  border-bottom-color:    silver;
 }
