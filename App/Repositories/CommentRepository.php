@@ -19,8 +19,10 @@ class CommentRepository
         return $stmt->execute([':articleId' => $articleId, ':username' => $username, ':textComment' => $textComment, ':dateComment' => $dateComment]);
     }
 
-    public static function findByArticleId($articleId, $excludeIds)
+    public static function findByArticleId($articleId, array $excludeIds)
     {
+        $ids = implode(', ', $excludeIds);
+
         $sql = '
             SELECT 
               id, articleId, username, textComment, dateComment 
@@ -28,7 +30,7 @@ class CommentRepository
               ' . self::TABLE . ' 
             WHERE 
               articleId = :articleId 
-            AND id NOT IN (' . $excludeIds . ')';
+            AND id NOT IN (' . $ids . ')';
 
         $stmt = Database::getInstance()->prepare($sql);
         $stmt->execute([':articleId' => $articleId]);

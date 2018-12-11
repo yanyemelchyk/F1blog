@@ -13,13 +13,21 @@ class AuthController extends Controller
         // TODO: Implement setMiddleware() method.
     }
 
+    public function indexAction()
+    {
+        $this->view->render('login.php', ['title' => 'Авторизация пользователя', 'userAuthorized' => false]);
+    }
+
     public function loginAction()
     {
         if (!isset($_SESSION['user']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
-            $authComp = new AuthComponent();
-            $this->view->errors = $authComp->authAction($_POST['username'], $_POST['password']);
+            $auth = new AuthComponent();
+            if ($auth->signIn($_POST['username'], $_POST['password'])) {
+                echo json_encode(array('redirect' => '/'));
+                return;
+            }
+            echo json_encode(array('message' => $auth->getError()));
         }
-        $this->view->render('login.php', ['title' => 'Авторизация пользователя']);
     }
 
     public function logoutAction()
@@ -36,7 +44,6 @@ class AuthController extends Controller
             session_destroy();
         }
         setcookie("sessionId", "", $expires, "/");
-
         App::getInstance()->router->redirect('/');
     }
 }

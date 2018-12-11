@@ -1,37 +1,40 @@
 <?php
 namespace App\Components;
 
-use App\Core\App;
 use App\Entities\Session;
 use App\Entities\User;
 use App\Repositories\SessionRepository;
 
 class AuthComponent
 {
-    public $errors;
+    public $error;
 
-    public function authAction($username, $password)
+    public function signIn($username, $password)
     {
         if (!ctype_alnum($username)) {
-            $this->errors[] = 'Введите ваше имя пользователя';
+            $this->error = 'Введите ваше имя пользователя';
+            return false;
         }
         if (!ctype_alnum($password)) {
-            $this->errors[] = 'Введите ваш пароль';
+            $this->error = 'Введите ваш пароль';
+            return false;
         }
-        if (!$this->errors) {
-            $user = User::findByUsername($username);
+        $user = User::findByUsername($username);
 
-            if ($user && password_verify($password, $user->getPassword())) {
-                $this->sessionAction($user);
-                App::getInstance()->router->redirect('/');
-            } else {
-                $this->errors[] = 'Неправильный логин или пароль';
-            }
+        if (!$user || !password_verify($password, $user->getPassword())) {
+            $this->error = 'Неправильный логин или пароль';
+            return false;
         }
-        return $this->errors;
+        $this->sessionStart($user);
+        return true;
     }
 
-    public function sessionAction($user)
+    public function getError()
+    {
+        return $this->error;
+    }
+
+    private function sessionStart($user)
     {
         $_SESSION['user'] = $user;
         $date = new \DateTime('+5 days');

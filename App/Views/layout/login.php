@@ -1,10 +1,5 @@
 <h2>Войти</h2>
-
-<?php foreach ($this->errors as $error) : ?>
-<p class="error"><?= $error ?></p>
-<?php endforeach;
-echo $this->message ?? ''; ?>
-
+<p class="error"></p>
 <form method="post" action="/auth/login">
     <fieldset>
         <label for="username">Имя пользователя:</label>
@@ -12,5 +7,24 @@ echo $this->message ?? ''; ?>
         <label for="password">Пароль:</label>
         <input type="password" name="password">
     </fieldset>
-    <input type="submit" value="Войти" name="submit">
+    <button type="submit" name="submit">Войти</button>
 </form>
+
+<script>
+    $(document).ready(function () {
+        $('form').submit(function () {
+            $.ajax({
+                url: this.action,
+                type: this.method,
+                dataType: 'json',
+                data: $(this).serializeArray()
+            }).done(function (json) {
+                $('p.error').html(json.message);
+                if (json.redirect) {
+                    location.href = json.redirect;
+                }
+            });
+            return false;
+        });
+    });
+</script>
