@@ -1,20 +1,18 @@
 <?php
+
 namespace App\Views;
 
-use App\Helpers\UrlHelper;
+use App\Core\App;
 
 class View
 {
     public $data = [];
-    public $errors = [];
-    public $message;
-    public $title;
-    public $template;
-    public $url;
+    private $template;
+    private $router;
 
     public function __construct()
     {
-        $this->url = new UrlHelper();
+        $this->router = App::getInstance()->router;
     }
 
     public function __set($key, $value)

@@ -1,4 +1,4 @@
-<div class="newsPage">
+<div id="<?= $this->article->getId() ?>" class="newsPage">
     <h2><?= htmlspecialchars($this->article->getTitle()) ?></h2>
     <p class="date"><?= $this->article->getDate() ?></p>
     <img src= "<?= '/' . UPLOAD_PATH . '/' . $this->article->getImage() ?>" title="<?= htmlspecialchars($this->article->getTitle()) ?>">
@@ -6,21 +6,21 @@
 </div>
 <p class="error"></p>
 
-<?php if ($this->userAuthorized) : ?>
-<div class="comment">
-    <form action="/comment/create" method="post">
-        <legend>Ваше мнение, <?= $this->user->getUsername() ?>?</legend>
-        <input type="hidden" name="username" value="<?= $this->user->getUsername() ?>" />
-        <input id="articleId" type="hidden" name="articleId" value="<?= $this->article->getId() ?>" />
-        <textarea rows="4" cols="75" name="textComment"></textarea>
-        <button type="submit">Добавить</button>
-    </form>
-</div>
+<?php if ($this->user) : ?>
+    <div class="comment">
+        <form action="/comment/create" method="post">
+            <legend>What do you think, <?= $this->user->getUsername() ?>?</legend>
+            <input type="hidden" name="username" value="<?= $this->user->getUsername() ?>">
+            <input type="hidden" name="articleId" value="<?= $this->article->getId() ?>">
+            <textarea rows="4" cols="75" name="textComment"></textarea>
+            <button type="submit">Add</button>
+        </form>
+    </div>
 <?php else : ?>
-<p>Чтобы оставить комментарий Вам необходимо <a href="<?= $this->url->to('auth') ?>">войти</a> или <a href="<?= $this->url->to('user/create') ?>">зарегистрироваться</a></p>
+    <p><a href="<?= $this->router->getUrl('authMain') ?>">Sign in</a></p>
 <?php endif; ?>
 
-<div id="discuss">ОБСУЖДЕНИЕ</div>
+<div id="discuss">DISCUSSION</div>
 <div id="commentsContainer"></div>
 
 <script>
@@ -31,13 +31,13 @@
             $.ajax({
                 url: this.action,
                 type: this.method,
-                dataType: 'json',
                 data: $(this).serializeArray()
-            }).done(function (json) {
-                $('p.error').html(json.message);
-                if (json.success) {
-                    $('textarea').val('');
-                }
+            }).done(function () {
+                $('textarea').val('');
+                $('p.error').html('');
+            }).fail(function (jqXHR) {
+                let error = JSON.parse(jqXHR.responseText);
+                $('p.error').html(error.message);
             });
             return false;
         });
@@ -45,7 +45,7 @@
 
     function show()
     {
-        let articleId = $('#articleId').val();
+        let articleId = $('.newsPage').attr('id');
         let excludeIds = $('#commentsContainer div').map(function () {
             return $(this).attr('id');
         }).get();
@@ -59,9 +59,6 @@
             $.each(json.comments, function () {
                 $('#commentsContainer').append('<div id="'+this.id+'"><p>'+this.username+'</p><p>'+this.textComment+'</p></div>');
             });
-            if (json.message) {
-                $('p.error').html(json.message);
-            }
         });
     }
 </script>

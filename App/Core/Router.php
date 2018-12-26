@@ -1,51 +1,66 @@
 <?php
+
 namespace App\Core;
 
 use App\Exceptions\NotFoundHttpException;
 
 class Router
 {
-    const DEFAULT_CONTROLLER = 'ArticleController';
-    const DEFAULT_ACTION = 'indexAction';
-
-    private $controller;
-    private $action;
-    private $params;
+    protected $routes = [];
+    protected $params = [];
 
     public function __construct()
     {
-        $request = $_SERVER['REQUEST_URI'];
-        $segments = explode('/', trim($request, '/'));
-        $this->controller = $segments[0] ? ucfirst($segments[0]) . 'Controller' : self::DEFAULT_CONTROLLER;
-        $this->action = isset($segments[1]) ? $segments[1] . 'Action' : self::DEFAULT_ACTION;
-        if (isset($segments[2])) {
-            $cnt = count($segments);
-            for ($i = 2; $i < $cnt; $i += 2) {
-                $this->params[$segments[$i]] = $segments[$i+1];
+        $routesMap = Map::getRoutes();
+        foreach ($routesMap as $value) {
+            $route = $this->add(array_shift($value));
+            $this->routes[$route] = $value;
+        }
+    }
+
+    public function add($route)
+    {
+        $route = preg_replace('/{([a-z]+):([^\}]+)}/', '(?<\1>\2)', $route);
+        $route = '#^' . $route . '$#';
+        return $route;
+    }
+
+    public function match()
+    {
+        $url = trim($_SERVER['REQUEST_URI'], '/');
+        foreach ($this->routes as $route => $params) {
+            if (preg_match($route, $url,$matches)) {
+                foreach ($matches as $key => $match) {
+                    if (is_string($key) && is_numeric($match)) {
+                        $params[$key] = $match;
+                    }
+                }
+                $this->params = $params;
+                return true;
             }
         }
+        return false;
     }
 
     public function run()
     {
-        $controllerName = '\App\Controllers\\' . $this->getController();
+        if (!$this->match()) {
+            throw new NotFoundHttpException('Router!');
+        }
+        $path = '\App\Controllers\\' . ucfirst($this->params['controller']) . 'Controller';
 
-        if (!class_exists($controllerName)) {
+        if (!class_exists($path)) {
             throw new NotFoundHttpException('Controller!');
         }
-        /** @var $controller Controller */
-        $controller = new $controllerName;
-        $controller->run($this->getAction());
+        $action = $this->params['action'] . 'Action';
+        $controller = new $path;
+        $controller->run($action);
     }
 
     public function redirect($url)
     {
         header('Location: ' . $url);
-    }
-
-    public function refresh()
-    {
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        exit();
     }
 
     public function getParams()
@@ -53,13 +68,20 @@ class Router
         return $this->params;
     }
 
-    public function getController()
+    public function getUrl($alias, $params = null)
     {
-        return $this->controller;
-    }
-
-    public function getAction()
-    {
-        return $this->action;
+        $url = '/';
+        $routesMap = Map::getRoutes();
+        foreach ($routesMap as $key => $value) {
+            if ($key === $alias) {
+                $url .= preg_replace('/{([a-z]+):([^\}]+)}/', '', $value['url']);
+            }
+        }
+        if (!is_null($params)) {
+            foreach ($params as $param) {
+                $url .= $param;
+            }
+        }
+        return $url;
     }
 }

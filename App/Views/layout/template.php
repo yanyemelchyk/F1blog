@@ -13,21 +13,21 @@
 <body>
 <div id="allcontent">
     <header>
-        <h1><a href="<?= $this->url->to('article') ?>" title="F1 blog | На главную">F1 <span class="title">blog</span></a></h1>
+        <h1><a href="<?= $this->router->getUrl('home') ?>">F1 <span class="title">blog</span></a></h1>
     </header>
     <section>
         <?php include "./../App/Views/layout/$this->template" ?>
     </section>
     <aside>
         <ul>
-            <?php if ($this->userAuthorized) : ?>
-            <li><a href="<?= $this->url->to('auth/logout') ?>">Выйти</a></li>
+            <?php if ($this->user): ?>
+            <li><a href="<?= $this->router->getUrl('logout') ?>">Sign out</a></li>
             <?php else: ?>
-            <li><a href="<?= $this->url->to('auth') ?>">Уже есть аккаунт? Войти</a></li>
-            <li><a href="<?= $this->url->to('user/create') ?>">Регистрация</a></li>
+            <li><a href="<?= $this->router->getUrl('authMain') ?>">Sign in</a></li>
+            <li><a href="<?= $this->router->getUrl('createUser') ?>">Register</a></li>
             <?php endif ?>
-            <li><a href="<?= $this->url->to('article/create') ?>">Добавить статью</a></li>
-            <li><a href="<?= $this->url->to('user/show') ?>">Просмотреть профиль</a></li>
+            <li><a href="<?= $this->router->getUrl('createArticle') ?>">Add an article</a></li>
+            <li><a href="<?= $this->router->getUrl('showProfile') ?>">My profile</a></li>
         </ul>
     </aside>
 

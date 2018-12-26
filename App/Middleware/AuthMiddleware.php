@@ -8,8 +8,7 @@ class AuthMiddleware implements MiddlewareInterface
     public function handle()
     {
         if (!isset($_SESSION['user'])) {
-            App::getInstance()->router->redirect('/auth');
-            exit();
+            App::getInstance()->router->redirect('/auth/index');
         }
         return;
     }

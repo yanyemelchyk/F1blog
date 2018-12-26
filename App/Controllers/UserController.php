@@ -1,6 +1,9 @@
 <?php
+
 namespace App\Controllers;
 
+use App\Response\Error;
+use App\Response\JsonResponse;
 use App\Core\Controller;
 use App\Entities\User;
 use App\Middleware\AuthMiddleware;
@@ -26,42 +29,27 @@ class UserController extends Controller
             $password2 = $_POST['password2'];
 
             if (!ctype_alnum($username) || !ctype_alnum($password)) {
-                echo json_encode(array('message' => 'Допустимы только латинские буквы и цифры'));
-                return;
+                return new JsonResponse(new Error('Only Latin letters and numbers are allowed.'), 400);
             }
             if ($password !== $password2) {
-                echo json_encode(array('message' => 'Пароль и подтверждение не совпадают'));
-                return;
+                return new JsonResponse(new Error('Password and confirmation do not match.'), 400);
             }
             if (User::findByUsername($username)) {
-                echo json_encode(array('message' => 'Пользователь с таким логином уже существует'));
-                return;
+                return new JsonResponse(new Error('A user with this login already exists.'), 400);
             }
             $password = password_hash($password, PASSWORD_DEFAULT);
 
             if (!User::create($username, $password)) {
-                echo json_encode(array('message' => 'Произошла ошибка при создании пользователя. Повторите попытку'));
-                return;
+                return new JsonResponse(new Error('An error occurred while creating the user. Try again.'), 400);
             }
-            echo json_encode(array('success' => 'true', 'message' => 'Ваш аккаунт создан. Вы можете войти'));
-            return;
+            return new JsonResponse();
         }
-        $this->view->render('register.php', ['title' => 'Регистрация пользователя', 'userAuthorized' => false]);
+        $this->view->render('register.php', ['title' => 'F1blog - Register', 'user' => false]);
     }
 
     public function showAction()
     {
         $user = User::findByUserId($_SESSION['user']->getId());
-        if (!$user) {
-            $this->view->errors[] = 'При загрузке данных профиля произошла ошибка. Повторите попытку';
-        }
-        $this->view->render(
-            'profile.php',
-            [
-                'title' => 'Профиль пользователя',
-                'user' => $user,
-                'userAuthorized' => true
-            ]
-        );
+        $this->view->render('profile.php', ['title' => 'F1blog - My profile', 'user' => $user]);
     }
 }

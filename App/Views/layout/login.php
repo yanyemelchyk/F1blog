@@ -1,13 +1,13 @@
-<h2>Войти</h2>
+<h2>Sign in</h2>
 <p class="error"></p>
 <form method="post" action="/auth/login">
     <fieldset>
-        <label for="username">Имя пользователя:</label>
+        <label for="username">Username:</label>
         <input type="text" name="username"><br>
-        <label for="password">Пароль:</label>
+        <label for="password">Password:</label>
         <input type="password" name="password">
     </fieldset>
-    <button type="submit" name="submit">Войти</button>
+    <button type="submit" name="submit">Sign in</button>
 </form>
 
 <script>
@@ -16,13 +16,12 @@
             $.ajax({
                 url: this.action,
                 type: this.method,
-                dataType: 'json',
                 data: $(this).serializeArray()
-            }).done(function (json) {
-                $('p.error').html(json.message);
-                if (json.redirect) {
-                    location.href = json.redirect;
-                }
+            }).done(function () {
+                location.href = '/';
+            }).fail(function (jqXHR) {
+                let error = JSON.parse(jqXHR.responseText);
+                $('p.error').html(error.message);
             });
             return false;
         });

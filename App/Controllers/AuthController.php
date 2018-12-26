@@ -4,6 +4,7 @@ namespace App\Controllers;
 use App\Components\AuthComponent;
 use App\Core\App;
 use App\Core\Controller;
+use App\Response\JsonResponse;
 use DateTime;
 
 class AuthController extends Controller
@@ -15,7 +16,7 @@ class AuthController extends Controller
 
     public function indexAction()
     {
-        $this->view->render('login.php', ['title' => 'Авторизация пользователя', 'userAuthorized' => false]);
+        $this->view->render('login.php', ['title' => 'F1blog - Sign in', 'user' => false]);
     }
 
     public function loginAction()
@@ -23,10 +24,9 @@ class AuthController extends Controller
         if (!isset($_SESSION['user']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
             $auth = new AuthComponent();
             if ($auth->signIn($_POST['username'], $_POST['password'])) {
-                echo json_encode(array('redirect' => '/'));
-                return;
+                return new JsonResponse();
             }
-            echo json_encode(array('message' => $auth->getError()));
+            return new JsonResponse($auth->getError(), 400);
         }
     }
 

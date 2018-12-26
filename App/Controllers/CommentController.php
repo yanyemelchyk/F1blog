@@ -1,9 +1,11 @@
 <?php
 namespace App\Controllers;
 
+use App\Response\Error;
 use App\Core\Controller;
 use App\Entities\Comment;
 use App\Repositories\CommentRepository;
+use App\Response\JsonResponse;
 
 class CommentController extends Controller
 {
@@ -22,15 +24,13 @@ class CommentController extends Controller
             $dateComment = $date->format('Y-m-d H:i:s');
 
             if (!ctype_alnum($username) || !ctype_digit($articleId)) {
-                echo json_encode(array('message' => 'Ошибка при добавлении комментария'));
-                return;
+                return new JsonResponse(new Error('The comment is not added'), 400);
             }
             if (!$textComment) {
-                echo json_encode(array('message' => 'Введите текст комментария'));
-                return;
+                return new JsonResponse(new Error('Enter comment text'), 400);
             }
             CommentRepository::create($articleId, $username, $textComment, $dateComment);
-            echo json_encode(array('success' => true, 'message' => 'Комментарий добавлен'));
+            return new JsonResponse();
         }
     }
 
@@ -39,21 +39,19 @@ class CommentController extends Controller
         $articleId = $_POST['articleId'];
 
         if (!ctype_digit($articleId)) {
-            echo json_encode(array('message' => 'Ошибка при выводе комментариев'));
-            return;
+            throw new \InvalidArgumentException('Invalid articleId');
         }
         $excludeIds[] = 1;
 
         if (isset($_POST['excludeIds'])) {
             foreach ($_POST['excludeIds'] as $id) {
                 if (!ctype_digit($id)) {
-                    echo json_encode(array('message' => 'Invalid excludeIds'));
-                    return;
+                    throw new \InvalidArgumentException('Invalid commentId');
                 }
             }
             $excludeIds = $_POST['excludeIds'];
         }
         $comments = Comment::findByArticleId($articleId, $excludeIds);
-        echo json_encode(array('comments' => $comments));
+        return new JsonResponse(['comments' => $comments]);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Core;
 
 class App
@@ -12,7 +13,6 @@ class App
         if (is_null(self::$instance)) {
             self::$instance = new self;
         }
-
         return self::$instance;
     }
 
