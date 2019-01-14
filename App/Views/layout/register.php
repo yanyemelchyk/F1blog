@@ -21,7 +21,7 @@
                 let error = JSON.parse(jqXHR.responseText);
                 $('p.error').html(error.message);
             }).done(function () {
-                location.href = '/auth';
+                location.href = '/auth/index';
             });
             return false;
         });
